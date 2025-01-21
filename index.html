@@ -4,8 +4,10 @@
   <meta charset="UTF-8">
   <title>Demo de 5 Modos Solarpunk</title>
 
-  <!-- Estilos globales y de cada modo -->
+  <!-- Estilos globales y carrusel -->
   <link rel="stylesheet" href="/src/css/main.css">
+  
+  <!-- Estilos específicos (opcional, o puedes cargarlos dinámicamente en main.js) -->
   <link rel="stylesheet" href="/src/css/mode1.css">
   <link rel="stylesheet" href="/src/css/mode2.css">
   <link rel="stylesheet" href="/src/css/mode3.css">
@@ -14,89 +16,15 @@
 </head>
 <body>
 
-  <!-- CONTENEDOR PRINCIPAL DE MODOS (Slider) -->
+  <!-- CONTENEDOR PRINCIPAL DE MODOS (carrusel) -->
   <div class="container" id="slider">
-
-    <!-- ============== MODO 1 ============== -->
-    <section class="mode" id="mode1">
-      <h2>1. Jardín Vertical Dinámico</h2>
-      <p>Interacciona con las plantas: añádeles agua o sol. Si florecen, verás un patrón único.</p>
-      <div class="plant-container">
-        <!-- Cada 'plant' lleva atributos para agua y sol -->
-        <div class="plant" data-water="0" data-sun="0" onclick="addWater(this)">
-          <div class="stem">🌱</div>
-          <canvas class="bloomCanvas" width="80" height="80"></canvas>
-          <button class="sun-btn" onclick="addSun(event, this.parentNode)">Agregar Sol ☀️</button>
-        </div>
-
-        <div class="plant" data-water="0" data-sun="0" onclick="addWater(this)">
-          <div class="stem">🌱</div>
-          <canvas class="bloomCanvas" width="80" height="80"></canvas>
-          <button class="sun-btn" onclick="addSun(event, this.parentNode)">Agregar Sol ☀️</button>
-        </div>
-
-        <div class="plant" data-water="0" data-sun="0" onclick="addWater(this)">
-          <div class="stem">🌱</div>
-          <canvas class="bloomCanvas" width="80" height="80"></canvas>
-          <button class="sun-btn" onclick="addSun(event, this.parentNode)">Agregar Sol ☀️</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============== MODO 2 ============== -->
-    <section class="mode" id="mode2">
-      <h2>2. Caminos de Energía</h2>
-      <p>Clic en dos nodos para conectar. Visualiza la energía fluyendo.</p>
-      <div class="energy-container" id="energyContainer">
-        <!-- SVG para dibujar líneas -->
-        <svg class="energy-svg" id="energySvg"></svg>
-        <!-- Nodos -->
-        <div class="node" style="top: 20px; left: 20px;">A</div>
-        <div class="node" style="top: 200px; left: 50px;">B</div>
-        <div class="node" style="top: 60px; right: 40px;">C</div>
-        <div class="node" style="bottom: 30px; left: 45%;">D</div>
-      </div>
-    </section>
-
-    <!-- ============== MODO 3 ============== -->
-    <section class="mode" id="mode3">
-      <h2>3. Día y Noche Reactivo</h2>
-      <button class="day-night-btn" onclick="toggleDayNight()">Cambiar Día/Noche</button>
-      <p class="info" id="time-info">Ahora es de día</p>
-
-      <!-- Sol y Luna -->
-      <div class="sun" id="sun"></div>
-      <div class="moon" id="moon"></div>
-
-      <!-- Contenedor de estrellas (se ve de noche) -->
-      <div class="stars" id="stars"></div>
-    </section>
-
-    <!-- ============== MODO 4 ============== -->
-    <section class="mode" id="mode4">
-      <h2>4. Ecosistema Vivo</h2>
-      <p>Mariposas e insectos volando. Un árbol al que podrían posarse.</p>
-
-      <div class="tree">🌳</div>
-      <!-- Varias "criaturas" en pantalla -->
-      <div class="creature" style="top: 50%; left: 10%;">🦋</div>
-      <div class="creature" style="top: 60%; left: 30%; animation-duration:7s;">🐝</div>
-      <div class="creature" style="top: 40%; left: 70%; animation-duration:5s;">🐦</div>
-    </section>
-
-    <!-- ============== MODO 5 ============== -->
-    <section class="mode" id="mode5">
-      <h2>5. Terrenos Personalizables</h2>
-      <div class="terrain" id="terrain">
-        <!-- Ejemplo: un río en el centro -->
-        <div class="terrain-object river"></div>
-        <!-- Un par de arbolitos -->
-        <div class="terrain-object tree-terrain" style="left: 10%; top: 30%;">🌲</div>
-        <div class="terrain-object tree-terrain" style="right: 15%; top: 50%;">🌳</div>
-      </div>
-      <button class="terrain-btn" onclick="customizeTerrain()">Modificar Terreno</button>
-    </section>
-
+    
+    <!-- Cada sección estará vacía al inicio, la llenaremos con fetch() -->
+    <section class="mode" id="mode1"></section>
+    <section class="mode" id="mode2"></section>
+    <section class="mode" id="mode3"></section>
+    <section class="mode" id="mode4"></section>
+    <section class="mode" id="mode5"></section>
   </div>
 
   <!-- BOTONES DE NAVEGACIÓN FLOTANTES -->
