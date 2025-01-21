@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Demo de 5 Modos Solarpunk</title>
+  <style>
+    /* RESET BÁSICO */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden; /* Evita scroll nativo, gestionaremos el desplazamiento con transform */
+      font-family: sans-serif;
+    }
+
+    /* CONTENEDOR PRINCIPAL */
+    .container {
+      display: flex;
+      width: 500vw; /* 5 pantallas de ancho */
+      height: 100vh;
+      transition: transform 0.6s ease; /* Transición suave */
+    }
+
+    /* CADA MODO/SECCIÓN */
+    .mode {
+      width: 100vw;
+      height: 100vh;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      color: #fff; /* Texto en blanco */
+    }
+
+    /* Botones de navegación flotantes */
+    .nav-buttons {
+      position: fixed;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 0.5rem;
+    }
+    .nav-buttons button {
+      background: rgba(0, 0, 0, 0.6);
+      border: none;
+      color: #fff;
+      padding: 0.8rem 1.2rem;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+    .nav-buttons button:hover {
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    /* 1. Jardín Vertical (MODE 1) */
+    #mode1 {
+      background: linear-gradient(to bottom, #86e074, #65c368); 
+      /* Verde suave */
+    }
+    .plant-container {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-end;
+    }
+    .plant {
+      font-size: 2rem;
+      user-select: none;
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+    .plant.watered {
+      transform: scale(1.4) rotate(-10deg);
+    }
+
+    /* 2. Caminos de Energía (MODE 2) */
+    #mode2 {
+      background: linear-gradient(to bottom, #dd5ebe, #a83c9d);
+      /* Rosa/violeta */
+      position: relative;
+    }
+    .energy-path {
+      width: 80%;
+      height: 4px;
+      background: rgba(255,255,255,0.4);
+      position: relative;
+      overflow: hidden;
+      margin: 1rem 0;
+    }
+    .energy-flow {
+      width: 20px;
+      height: 4px;
+      background: #fff;
+      position: absolute;
+      animation: flow 2s infinite linear;
+    }
+    @keyframes flow {
+      0% { left: -20px; }
+      100% { left: 100%; }
+    }
+
+    /* 3. Día y Noche Reactivo (MODE 3) */
+    #mode3 {
+      background: #ffd452; /* Día (amarillo suave) */
+      transition: background 1s;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .day-night-btn {
+      padding: 1rem;
+      border: none;
+      border-radius: 5px;
+      background: #333;
+      color: #fff;
+      cursor: pointer;
+    }
+    .info {
+      font-size: 1.2rem;
+    }
+
+    /* 4. Ecosistema Vivo (MODE 4) */
+    #mode4 {
+      background: linear-gradient(to bottom, #78c6e7, #5b9fd4);
+      /* Azul-cielo */
+      position: relative;
+      overflow: hidden;
+    }
+    .butterfly {
+      position: absolute;
+      top: 50%;
+      left: 10%;
+      font-size: 2rem;
+      animation: fly 6s infinite ease-in-out;
+    }
+    @keyframes fly {
+      0%   { transform: translate(0, 0) rotate(0); }
+      25%  { transform: translate(200px, -100px) rotate(20deg); }
+      50%  { transform: translate(400px, 20px) rotate(-20deg); }
+      75%  { transform: translate(200px, 50px) rotate(10deg); }
+      100% { transform: translate(0, 0) rotate(0); }
+    }
+
+    /* 5. Terrenos Personalizables (MODE 5) */
+    #mode5 {
+      background: linear-gradient(to bottom, #e3c294, #cba26e);
+      /* Tonos tierra */
+      position: relative;
+    }
+    .terrain {
+      width: 300px;
+      height: 200px;
+      background: #654321;
+      border-radius: 20px;
+      position: relative;
+      margin-bottom: 1rem;
+    }
+    .terrain:hover {
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    .terrain-btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      background: #333;
+      color: #fff;
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- CONTENEDOR PRINCIPAL DE MODOS -->
+  <div class="container" id="slider">
+    
+    <!-- 1. Jardín Vertical Dinámico -->
+    <section class="mode" id="mode1">
+      <h2>1. Jardín Vertical Dinámico</h2>
+      <p>Haz clic en las plantas para regarlas.</p>
+      <div class="plant-container">
+        <div class="plant" onclick="waterPlant(this)">🌱</div>
+        <div class="plant" onclick="waterPlant(this)">🌱</div>
+        <div class="plant" onclick="waterPlant(this)">🌱</div>
+      </div>
+    </section>
+
+    <!-- 2. Caminos de Energía -->
+    <section class="mode" id="mode2">
+      <h2>2. Caminos de Energía</h2>
+      <p>Visualización simple del flujo energético.</p>
+      <div class="energy-path">
+        <div class="energy-flow"></div>
+      </div>
+      <div class="energy-path">
+        <div class="energy-flow"></div>
+      </div>
+    </section>
+
+    <!-- 3. Día y Noche Reactivo -->
+    <section class="mode" id="mode3">
+      <h2>3. Día y Noche Reactivo</h2>
+      <button class="day-night-btn" onclick="toggleDayNight()">Cambiar Día/Noche</button>
+      <p class="info" id="time-info">Ahora es de día</p>
+    </section>
+
+    <!-- 4. Ecosistema Vivo -->
+    <section class="mode" id="mode4">
+      <h2>4. Ecosistema Vivo</h2>
+      <p>Mariposa volando en bucle.</p>
+      <div class="butterfly">🦋</div>
+    </section>
+
+    <!-- 5. Terrenos Personalizables -->
+    <section class="mode" id="mode5">
+      <h2>5. Terrenos Personalizables</h2>
+      <div class="terrain"></div>
+      <button class="terrain-btn" onclick="customizeTerrain()">Modificar Terreno</button>
+    </section>
+
+  </div>
+
+  <!-- BOTONES DE NAVEGACIÓN FLOTANTES -->
+  <div class="nav-buttons">
+    <button onclick="goToSlide(0)">Modo 1</button>
+    <button onclick="goToSlide(1)">Modo 2</button>
+    <button onclick="goToSlide(2)">Modo 3</button>
+    <button onclick="goToSlide(3)">Modo 4</button>
+    <button onclick="goToSlide(4)">Modo 5</button>
+  </div>
+
+  <script>
+    /* Variable global para el modo actual (0 a 4) */
+    let currentSlide = 0;
+
+    /* Función para desplazarnos a una sección específica */
+    function goToSlide(index) {
+      currentSlide = index;
+      const slider = document.getElementById('slider');
+      slider.style.transform = `translateX(-${index * 100}vw)`;
+    }
+
+    /* 1. Jardín Vertical: regar plantas */
+    function waterPlant(plantEl) {
+      plantEl.classList.toggle('watered');
+    }
+
+    /* 3. Día y Noche Reactivo */
+    let isDay = true;
+    function toggleDayNight() {
+      const mode3 = document.getElementById('mode3');
+      const info = document.getElementById('time-info');
+      if (isDay) {
+        // Noche
+        mode3.style.background = '#2a2a6b'; // Azul oscuro
+        info.textContent = 'Ahora es de noche';
+      } else {
+        // Día
+        mode3.style.background = '#ffd452'; // Amarillo suave
+        info.textContent = 'Ahora es de día';
+      }
+      isDay = !isDay;
+    }
+
+    /* 5. Terrenos Personalizables */
+    let terrainState = 0;
+    function customizeTerrain() {
+      const terrain = document.querySelector('.terrain');
+      terrainState = (terrainState + 1) % 3;
+      switch (terrainState) {
+        case 0:
+          terrain.style.borderRadius = '20px';
+          terrain.style.background = '#654321';
+          break;
+        case 1:
+          terrain.style.borderRadius = '50%';
+          terrain.style.background = '#997950';
+          break;
+        case 2:
+          terrain.style.borderRadius = '0';
+          terrain.style.background = '#4a3018';
+          break;
+      }
+    }
+
+    /* Opcional: Iniciar siempre en la primera sección (0) */
+    goToSlide(0);
+  </script>
+
+</body>
+</html>
