@@ -1,1 +1,59 @@
-/* This file is intentionally left blank. */
+/* mode2.css */
+
+#mode2 {
+    background: linear-gradient(to bottom, #dd5ebe, #a83c9d);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  .energy-container {
+    position: relative;
+    width: 80%;
+    max-width: 600px;
+    height: 300px;
+    border: 2px dashed rgba(255,255,255,0.3);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .node {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #a83c9d;
+    user-select: none;
+  }
+  
+  /* Conexión en SVG */
+  .energy-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* para que no interfiera con clics */
+  }
+  .energy-path {
+    stroke: #fff;
+    stroke-width: 3;
+    stroke-linecap: round;
+    /* Efecto de línea animada */
+    stroke-dasharray: 8;
+    animation: dash 1.5s linear infinite;
+  }
+  @keyframes dash {
+    to {
+      stroke-dashoffset: 16;
+    }
+  }
+  

@@ -1,1 +1,56 @@
-/* This file is intentionally left blank. */
+/* mode5.css */
+
+#mode5 {
+    background: linear-gradient(to bottom, #e3c294, #cba26e);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  .terrain {
+    width: 400px;
+    height: 250px;
+    background: #654321;
+    border-radius: 20px;
+    position: relative;
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+  .terrain:hover {
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  }
+  
+  .terrain-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    background: #333;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  /* Elementos (árboles, ríos) dentro del terreno */
+  .terrain-object {
+    position: absolute;
+    cursor: pointer;
+  }
+  
+  .river {
+    width: 100%;
+    height: 20px;
+    background: #3599f3;
+    top: 50%;
+    left: 0;
+  }
+  
+  .tree-terrain {
+    font-size: 2rem;
+  }
+  .tree-terrain:hover {
+    transform: scale(1.1);
+  }
+  

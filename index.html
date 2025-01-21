@@ -3,344 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <title>Demo de 5 Modos Solarpunk</title>
-  <style>
-    /* RESET BÁSICO */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    html, body {
-      height: 100%;
-      overflow: hidden; /* Evita scroll nativo, gestionaremos el desplazamiento con transform */
-      font-family: sans-serif;
-    }
 
-    /* CONTENEDOR PRINCIPAL (carrusel de 5 pantallas) */
-    .container {
-      display: flex;
-      width: 500vw; /* 5 pantallas de ancho */
-      height: 100vh;
-      transition: transform 0.6s ease; /* Transición suave */
-    }
-    /* Cada sección (modo) ocupa 100vw */
-    .mode {
-      width: 100vw;
-      height: 100vh;
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      color: #fff; /* Texto en blanco */
-      position: relative; /* Para que podamos usar position absoluta de elementos internos */
-      overflow: hidden;
-    }
-
-    /* BOTONES FLOTANTES DE NAVEGACIÓN (abajo) */
-    .nav-buttons {
-      position: fixed;
-      bottom: 1rem;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 0.5rem;
-      z-index: 9999;
-    }
-    .nav-buttons button {
-      background: rgba(0, 0, 0, 0.6);
-      border: none;
-      color: #fff;
-      padding: 0.8rem 1.2rem;
-      cursor: pointer;
-      border-radius: 4px;
-      font-size: 1rem;
-      transition: background 0.3s;
-    }
-    .nav-buttons button:hover {
-      background: rgba(0, 0, 0, 0.8);
-    }
-
-    /* =========================
-       1. JARDÍN VERTICAL DINÁMICO
-       ========================= */
-    /* Variables de color para plantas */
-    :root {
-      --plant-default: #3E8B3E; /* Verde base */
-      --plant-bloom:   #F9D371; /* Color cuando florece */
-    }
-
-    #mode1 {
-      background: linear-gradient(to bottom, #86e074, #65c368);
-    }
-    .plant-container {
-      display: flex;
-      gap: 2rem;
-      align-items: flex-end;
-      justify-content: center;
-    }
-    .plant {
-      position: relative;
-      cursor: pointer;
-      text-align: center;
-      transition: transform 0.3s;
-      padding: 1rem;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.1);
-    }
-    .plant .stem {
-      display: block;
-      font-size: 2.5rem;
-      transition: color 0.3s;
-      color: var(--plant-default);
-    }
-    .bloomCanvas {
-      display: none;
-      margin-top: 0.5rem;
-      border: 2px solid #fff;
-      border-radius: 50%;
-    }
-    /* Botón para añadir sol */
-    .sun-btn {
-      margin-top: 0.5rem;
-      padding: 0.3rem 0.6rem;
-      background-color: rgba(0, 0, 0, 0.2);
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      font-size: 0.85rem;
-      border-radius: 5px;
-      transition: background 0.3s;
-    }
-    .sun-btn:hover {
-      background-color: rgba(0, 0, 0, 0.4);
-    }
-    /* Cuando la planta florece */
-    .plant.blooming {
-      transform: scale(1.1) rotate(-2deg);
-    }
-    .plant.blooming .stem {
-      color: var(--plant-bloom);
-    }
-    .plant.blooming .bloomCanvas {
-      display: inline-block;
-    }
-
-    /* =========================
-       2. CAMINOS DE ENERGÍA
-       ========================= */
-    #mode2 {
-      background: linear-gradient(to bottom, #dd5ebe, #a83c9d);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-    }
-    .energy-container {
-      position: relative;
-      width: 80%;
-      max-width: 600px;
-      height: 300px;
-      border: 2px dashed rgba(255,255,255,0.3);
-      border-radius: 8px;
-      overflow: hidden;
-    }
-    /* Pequeñas "células" o "edificios" donde conectar energía */
-    .node {
-      position: absolute;
-      width: 40px;
-      height: 40px;
-      background: #fff;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      color: #a83c9d;
-      user-select: none;
-    }
-    /* Conexión en SVG */
-    .energy-svg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none; /* para que no interfiera con clics */
-    }
-    .energy-path {
-      stroke: #fff;
-      stroke-width: 3;
-      stroke-linecap: round;
-      /* Efecto de línea animada */
-      stroke-dasharray: 8;
-      animation: dash 1.5s linear infinite;
-    }
-    @keyframes dash {
-      to {
-        stroke-dashoffset: 16;
-      }
-    }
-
-    /* =========================
-       3. DÍA Y NOCHE REACTIVO
-       ========================= */
-    #mode3 {
-      background: #ffd452; /* Día (amarillo suave) */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      position: relative;
-      transition: background 1.5s ease;
-    }
-    .day-night-btn {
-      padding: 1rem;
-      border: none;
-      border-radius: 5px;
-      background: #333;
-      color: #fff;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-    .info {
-      font-size: 1.2rem;
-    }
-    /* Sol y Luna animados */
-    .sun, .moon {
-      position: absolute;
-      top: 20%;
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      left: calc(50% - 40px);
-      transition: transform 1.5s ease;
-    }
-    .sun {
-      background: radial-gradient(circle at 30% 30%, #ffe600, #ffa600);
-      box-shadow: 0 0 20px rgba(255, 232, 0, 0.6);
-    }
-    .moon {
-      background: radial-gradient(circle at 30% 30%, #ccc, #888);
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-      display: none; /* Se oculta de día */
-    }
-    /* Estrellas (se muestran de noche) */
-    .stars {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      display: none;
-    }
-    .star {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: #fff;
-      border-radius: 50%;
-    }
-
-    /* =========================
-       4. ECOSISTEMA VIVO
-       ========================= */
-    #mode4 {
-      background: linear-gradient(to bottom, #78c6e7, #5b9fd4);
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-    }
-    /* Varias mariposas/aves insectos */
-    .creature {
-      position: absolute;
-      font-size: 2rem;
-      animation: fly 6s infinite ease-in-out;
-    }
-    @keyframes fly {
-      0%   { transform: translate(0, 0)   rotate(0); }
-      25%  { transform: translate(200px, -100px) rotate(20deg); }
-      50%  { transform: translate(400px, 20px)   rotate(-20deg); }
-      75%  { transform: translate(200px, 50px)   rotate(10deg); }
-      100% { transform: translate(0, 0)   rotate(0); }
-    }
-    .tree {
-      position: absolute;
-      bottom: 0;
-      width: 100px;
-      font-size: 5rem;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-
-    /* =========================
-       5. TERRENOS PERSONALIZABLES
-       ========================= */
-    #mode5 {
-      background: linear-gradient(to bottom, #e3c294, #cba26e);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-    }
-    .terrain {
-      width: 400px;
-      height: 250px;
-      background: #654321;
-      border-radius: 20px;
-      position: relative;
-      margin-bottom: 1rem;
-      overflow: hidden;
-    }
-    .terrain:hover {
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    }
-    .terrain-btn {
-      padding: 0.5rem 1rem;
-      border: none;
-      background: #333;
-      color: #fff;
-      cursor: pointer;
-      border-radius: 4px;
-      font-size: 1rem;
-    }
-    /* Elementos (árboles, ríos) dentro del terreno */
-    .terrain-object {
-      position: absolute;
-      cursor: pointer;
-    }
-    .river {
-      width: 100%;
-      height: 20px;
-      background: #3599f3;
-      top: 50%;
-      left: 0;
-    }
-    .tree-terrain {
-      font-size: 2rem;
-    }
-    .tree-terrain:hover {
-      transform: scale(1.1);
-    }
-  </style>
+  <!-- Estilos globales y de cada modo -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/mode1.css">
+  <link rel="stylesheet" href="css/mode2.css">
+  <link rel="stylesheet" href="css/mode3.css">
+  <link rel="stylesheet" href="css/mode4.css">
+  <link rel="stylesheet" href="css/mode5.css">
 </head>
 <body>
 
-  <!-- CONTENEDOR PRINCIPAL DE MODOS -->
+  <!-- CONTENEDOR PRINCIPAL DE MODOS (Slider) -->
   <div class="container" id="slider">
 
-    <!-- ============== MODO 1: Jardín Vertical Dinámico ============== -->
+    <!-- ============== MODO 1 ============== -->
     <section class="mode" id="mode1">
       <h2>1. Jardín Vertical Dinámico</h2>
       <p>Interacciona con las plantas: añádeles agua o sol. Si florecen, verás un patrón único.</p>
@@ -366,22 +43,22 @@
       </div>
     </section>
 
-    <!-- ============== MODO 2: Caminos de Energía ============== -->
+    <!-- ============== MODO 2 ============== -->
     <section class="mode" id="mode2">
       <h2>2. Caminos de Energía</h2>
       <p>Clic en dos nodos para conectar. Visualiza la energía fluyendo.</p>
       <div class="energy-container" id="energyContainer">
         <!-- SVG para dibujar líneas -->
         <svg class="energy-svg" id="energySvg"></svg>
-        <!-- Varias "estaciones" o "nodos" -->
+        <!-- Nodos -->
         <div class="node" style="top: 20px; left: 20px;">A</div>
         <div class="node" style="top: 200px; left: 50px;">B</div>
         <div class="node" style="top: 60px; right: 40px;">C</div>
-        <div class="node" style="bottom: 30px; left: 45%; ">D</div>
+        <div class="node" style="bottom: 30px; left: 45%;">D</div>
       </div>
     </section>
 
-    <!-- ============== MODO 3: Día y Noche Reactivo ============== -->
+    <!-- ============== MODO 3 ============== -->
     <section class="mode" id="mode3">
       <h2>3. Día y Noche Reactivo</h2>
       <button class="day-night-btn" onclick="toggleDayNight()">Cambiar Día/Noche</button>
@@ -395,7 +72,7 @@
       <div class="stars" id="stars"></div>
     </section>
 
-    <!-- ============== MODO 4: Ecosistema Vivo ============== -->
+    <!-- ============== MODO 4 ============== -->
     <section class="mode" id="mode4">
       <h2>4. Ecosistema Vivo</h2>
       <p>Mariposas e insectos volando. Un árbol al que podrían posarse.</p>
@@ -407,13 +84,13 @@
       <div class="creature" style="top: 40%; left: 70%; animation-duration:5s;">🐦</div>
     </section>
 
-    <!-- ============== MODO 5: Terrenos Personalizables ============== -->
+    <!-- ============== MODO 5 ============== -->
     <section class="mode" id="mode5">
       <h2>5. Terrenos Personalizables</h2>
       <div class="terrain" id="terrain">
         <!-- Ejemplo: un río en el centro -->
         <div class="terrain-object river"></div>
-        <!-- Un arbolito -->
+        <!-- Un par de arbolitos -->
         <div class="terrain-object tree-terrain" style="left: 10%; top: 30%;">🌲</div>
         <div class="terrain-object tree-terrain" style="right: 15%; top: 50%;">🌳</div>
       </div>
@@ -431,198 +108,12 @@
     <button onclick="goToSlide(4)">Modo 5</button>
   </div>
 
-  <script>
-    /***************************
-     *       SLIDER GLOBAL     *
-     **************************/
-    let currentSlide = 0;
-    function goToSlide(index) {
-      currentSlide = index;
-      const slider = document.getElementById('slider');
-      slider.style.transform = `translateX(-${index * 100}vw)`;
-    }
-    // Iniciar siempre en la primera sección
-    goToSlide(0);
-
-    /***************************
-     *    1. JARDÍN VERTICAL   *
-     **************************/
-    /* Añade agua al hacer clic en la planta */
-    function addWater(plantEl) {
-      let waterCount = parseInt(plantEl.getAttribute('data-water'), 10);
-      let sunCount   = parseInt(plantEl.getAttribute('data-sun'), 10);
-
-      waterCount++;
-      plantEl.setAttribute('data-water', waterCount);
-
-      checkBloom(plantEl, waterCount, sunCount);
-    }
-
-    /* Añade sol cuando se hace clic en el botón "Agregar Sol" */
-    function addSun(event, plantEl) {
-      // Evita que se active addWater() del onclick en el div
-      event.stopPropagation();
-
-      let waterCount = parseInt(plantEl.getAttribute('data-water'), 10);
-      let sunCount   = parseInt(plantEl.getAttribute('data-sun'), 10);
-
-      sunCount++;
-      plantEl.setAttribute('data-sun', sunCount);
-
-      checkBloom(plantEl, waterCount, sunCount);
-    }
-
-    /* Si agua + sol supera un umbral, florece */
-    function checkBloom(plantEl, water, sun) {
-      const threshold = 3;
-      if ((water + sun) >= threshold) {
-        plantEl.classList.add('blooming');
-        drawBloomPattern(plantEl.querySelector('.bloomCanvas'));
-      }
-    }
-
-    /* Genera un patrón aleatorio en el canvas de la planta */
-    function drawBloomPattern(canvas) {
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      const w = canvas.width;
-      const h = canvas.height;
-
-      // Limpia el canvas
-      ctx.clearRect(0, 0, w, h);
-
-      // Dibujar "pétalos" aleatorios
-      const petals = 4 + Math.floor(Math.random() * 5); // 4 a 8
-      for (let i = 0; i < petals; i++) {
-        const hue = Math.floor(Math.random() * 360);
-        ctx.fillStyle = `hsl(${hue}, 70%, 60%)`;
-        ctx.beginPath();
-
-        const radius = 10 + Math.random() * 20;
-        const x = Math.random() * w;
-        const y = Math.random() * h;
-
-        ctx.arc(x, y, radius, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-
-    /***************************
-     *    2. CAMINOS DE ENERGÍA
-     **************************/
-    // Mecanismo simple: al hacer clic en dos nodos, trazamos una línea entre ellos
-    let firstNode = null;
-    const energySvg = document.getElementById('energySvg');
-    const nodes = document.querySelectorAll('#mode2 .node');
-
-    nodes.forEach(node => {
-      node.addEventListener('click', () => {
-        if (!firstNode) {
-          // Primer clic
-          firstNode = node;
-          node.style.background = 'yellow';
-        } else {
-          // Segundo clic -> dibujamos la línea
-          if (node !== firstNode) {
-            drawEnergyLine(firstNode, node);
-          }
-          firstNode.style.background = '#fff';
-          firstNode = null;
-        }
-      });
-    });
-
-    function drawEnergyLine(nodeA, nodeB) {
-      const cRect = document.getElementById('energyContainer').getBoundingClientRect();
-
-      // Posiciones absolutas de cada nodo
-      const aRect = nodeA.getBoundingClientRect();
-      const bRect = nodeB.getBoundingClientRect();
-
-      // Centro de cada nodo
-      const ax = aRect.left + aRect.width / 2 - cRect.left;
-      const ay = aRect.top + aRect.height / 2 - cRect.top;
-      const bx = bRect.left + bRect.width / 2 - cRect.left;
-      const by = bRect.top + bRect.height / 2 - cRect.top;
-
-      // Creamos una <line> en SVG
-      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line.setAttribute('x1', ax);
-      line.setAttribute('y1', ay);
-      line.setAttribute('x2', bx);
-      line.setAttribute('y2', by);
-      line.classList.add('energy-path');
-
-      energySvg.appendChild(line);
-    }
-
-    /***************************
-     * 3. DÍA Y NOCHE REACTIVO *
-     **************************/
-    let isDay = true;
-    const mode3  = document.getElementById('mode3');
-    const info   = document.getElementById('time-info');
-    const sunEl  = document.getElementById('sun');
-    const moonEl = document.getElementById('moon');
-    const stars  = document.getElementById('stars');
-
-    // Generar estrellas de manera aleatoria (solo 1 vez)
-    for (let i = 0; i < 50; i++) {
-      const star = document.createElement('div');
-      star.className = 'star';
-      star.style.top  = Math.random() * 100 + '%';
-      star.style.left = Math.random() * 100 + '%';
-      stars.appendChild(star);
-    }
-
-    function toggleDayNight() {
-      if (isDay) {
-        // Cambiar a noche
-        mode3.style.background = '#2a2a6b';
-        info.textContent = 'Ahora es de noche';
-        sunEl.style.display = 'none';
-        moonEl.style.display = 'block';
-        stars.style.display = 'block';
-      } else {
-        // Cambiar a día
-        mode3.style.background = '#ffd452';
-        info.textContent = 'Ahora es de día';
-        sunEl.style.display = 'block';
-        moonEl.style.display = 'none';
-        stars.style.display = 'none';
-      }
-      isDay = !isDay;
-    }
-
-    /***************************
-     *  4. ECOSISTEMA VIVO     *
-     **************************/
-    // Aquí ya hemos animado mariposas/insectos con @keyframes
-    // Si quieres hacer que reaccionen a algo, puedes añadir listeners.
-
-    /***************************
-     * 5. TERRENOS PERSONALIZ. *
-     **************************/
-    let terrainState = 0;
-    const terrain = document.getElementById('terrain');
-
-    function customizeTerrain() {
-      terrainState = (terrainState + 1) % 3;
-      switch (terrainState) {
-        case 0:
-          terrain.style.borderRadius = '20px';
-          terrain.style.background = '#654321'; // marrón clásico
-          break;
-        case 1:
-          terrain.style.borderRadius = '50%';
-          terrain.style.background = '#997950'; // un tono más claro
-          break;
-        case 2:
-          terrain.style.borderRadius = '0';
-          terrain.style.background = '#4a3018'; // marrón más oscuro
-          break;
-      }
-    }
-  </script>
+  <!-- Scripts: primero el "global", luego cada modo -->
+  <script src="js/main.js"></script>
+  <script src="js/mode1.js"></script>
+  <script src="js/mode2.js"></script>
+  <script src="js/mode3.js"></script>
+  <script src="js/mode4.js"></script>
+  <script src="js/mode5.js"></script>
 </body>
 </html>

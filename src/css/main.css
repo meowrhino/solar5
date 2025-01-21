@@ -1,0 +1,62 @@
+/* main.css */
+
+/* RESET BÁSICO */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  html, body {
+    height: 100%;
+    overflow: hidden; /* Evita scroll nativo; slider se hace con transform */
+    font-family: sans-serif;
+  }
+  
+  /* CONTENEDOR PRINCIPAL (carrusel de 5 pantallas) */
+  .container {
+    display: flex;
+    width: 500vw; /* 5 pantallas de ancho */
+    height: 100vh;
+    transition: transform 0.6s ease; /* Transición suave */
+  }
+  
+  /* Cada sección (modo) ocupa 100vw */
+  .mode {
+    width: 100vw;
+    height: 100vh;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    color: #fff; /* Texto en blanco */
+    position: relative; /* Para overlays */
+    overflow: hidden;   /* Oculta desbordes */
+  }
+  
+  /* BOTONES FLOTANTES DE NAVEGACIÓN (abajo) */
+  .nav-buttons {
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    z-index: 9999;
+  }
+  .nav-buttons button {
+    background: rgba(0, 0, 0, 0.6);
+    border: none;
+    color: #fff;
+    padding: 0.8rem 1.2rem;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: background 0.3s;
+  }
+  .nav-buttons button:hover {
+    background: rgba(0, 0, 0, 0.8);
+  }
+  
